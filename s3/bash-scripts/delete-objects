@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-
-echo "== delete  bucket"
-
+echo "==delete  objects"
+#exit immedeatily when a cmand returns non-zero status
+set -e
 # Check if the first argument is provided
 if [ -z "$1" ]; then
     echo "There. needs to be bucket name eg ./bucket my-bucket-name."
@@ -10,7 +10,5 @@ fi
 
 BUCKET_NAME=$1
 
-aws s3api delete-bucket \
- --bucket $BUCKET_NAME \
- --query Location \
- --output text
+aws s3api delete-objects \
+--bucket $BUCKET_NAME 

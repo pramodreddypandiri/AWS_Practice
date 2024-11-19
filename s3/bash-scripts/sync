@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "==sync"
+echo "==syncc"
 #exit immedeatily when a cmand returns non-zero status
 set -e
 # Check if the first argument is provided
@@ -11,7 +11,7 @@ fi
 
 # Check if the second argument (file name) is provided
 if [ -z "$2" ]; then
-    echo "There. needs to be bucket name eg ./bucket my-bucket-name."
+    echo "There. needs to be file prefix."
     exit 1
 fi
 
@@ -23,7 +23,9 @@ OUTPUT_DIR="/tmp/s3-bash-scripts"
 
 
 #remove folder if already exists
-rm -r $OUTPUT_DIR
+if [ -d "$OUTPUT_DIR" ]; then
+    rm -r "$OUTPUT_DIR"
+fi
 
 #create a output directory
 mkdir -p $OUTPUT_DIR
@@ -35,7 +37,7 @@ NUM_FILES=$((RANDOM % 6 + 5))
 
 for ((i=1; i<=$NUM_FILES; i++)); do
     #generate random file name
-    FILENAME="$OUTPUT_DIR/$FILENAME_PREFIX_$i.txt"
+    FILENAME="$OUTPUT_DIR/${FILENAME_PREFIX}_$i.txt"
 
     #generate random data and write to the files
     dd if=/dev/urandom of="$FILENAME" bs=1024 count=$((RANDOM % 2024 +1 ))2>/dev/null
@@ -44,3 +46,8 @@ done
 tree $OUTPUT_DIR
 
 aws s3 sync $OUTPUT_DIR s3://$BUCKET_NAME
+
+
+
+
+
